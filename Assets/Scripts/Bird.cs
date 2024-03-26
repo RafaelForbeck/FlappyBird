@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,9 +8,12 @@ public class Bird : MonoBehaviour
     public Rigidbody2D rig;
     public float jumpForce;
 
+    private Vector3 startPosition;
+
     // Start is called before the first frame update
     void Start()
     {
+        startPosition = transform.position;
         rig.bodyType = RigidbodyType2D.Static;
     }
     
@@ -30,15 +34,15 @@ public class Bird : MonoBehaviour
         }
     }
 
+    public void StartGame()
+    {
+        rig.bodyType = RigidbodyType2D.Dynamic;
+        Jump();
+    }
+
     void StartUpdate()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            // GameManager.instance.status = GameStatus.Play;
-            GameManager.instance.StartGame();
-            rig.bodyType = RigidbodyType2D.Dynamic;
-            Jump();
-        }
+        
     }
 
     void PlayUpdate()
@@ -62,5 +66,11 @@ public class Bird : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         GameManager.instance.GameOver();
+    }
+
+    public void Restart()
+    {
+        transform.position = startPosition;
+        rig.bodyType = RigidbodyType2D.Static;
     }
 }
