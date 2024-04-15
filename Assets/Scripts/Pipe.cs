@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Pipe : MonoBehaviour
 {
-    public float speed;
     void Start()
     {
         
@@ -25,7 +24,7 @@ public class Pipe : MonoBehaviour
     }
     void PlayUpdate()
     {
-        transform.position += Vector3.left * Time.deltaTime * speed;
+        transform.position += Vector3.left * Time.deltaTime * GameManager.instance.speed;
 
         if (transform.position.x < -2.5f)
         {
