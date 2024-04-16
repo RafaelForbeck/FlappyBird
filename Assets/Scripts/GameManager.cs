@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,9 +24,13 @@ public class GameManager : MonoBehaviour
     public Image startImage;
     public Image gameOverImage;
     public TMP_Text scoreText;
+    public TMP_Text bestScoreText;
     int score = 0;
 
+
     private float gameOverTimer = 0f;
+    private string bestScoreKey = "bestScore";
+    private int bestScore;
 
     private void Awake()
     {
@@ -44,6 +49,9 @@ public class GameManager : MonoBehaviour
         Application.targetFrameRate = 60;
         startImage.enabled = true;
         gameOverImage.enabled = false;
+        scoreText.enabled = false;
+        bestScore = PlayerPrefs.GetInt(bestScoreKey);
+        UpdateBestScoreText();
     }
 
     private void Update()
@@ -74,12 +82,22 @@ public class GameManager : MonoBehaviour
         status = GameStatus.Play;
         bird.StartGame();
         startImage.enabled = false;
+        scoreText.enabled = true;
+        bestScoreText.enabled = false;
     }
 
     public void GameOver()
     {
         status = GameStatus.GameOver;
         gameOverImage.enabled = true;
+        scoreText.enabled = true;
+        bestScoreText.enabled = true;
+        if (score > bestScore)
+        {
+            bestScore = score;
+            PlayerPrefs.SetInt(bestScoreKey, bestScore);
+            UpdateBestScoreText();
+        }
     }
 
     void GameOverUpdate()
@@ -105,6 +123,8 @@ public class GameManager : MonoBehaviour
         score = 0;
         gameOverTimer = 0f;
         UpdateScoreText();
+        scoreText.enabled = false;
+        bestScoreText.enabled = true;
     }
 
     public void AddScore()
@@ -116,5 +136,10 @@ public class GameManager : MonoBehaviour
     private void UpdateScoreText()
     {
         scoreText.text = "Score: " + score.ToString();
+    }
+
+    private void UpdateBestScoreText()
+    {
+        bestScoreText.text = $"Best: {bestScore}";
     }
 }
