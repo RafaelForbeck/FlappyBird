@@ -9,6 +9,7 @@ public class Bird : MonoBehaviour
     public Rigidbody2D rig;
     public float jumpForce;
     public Animator animator;
+    public AudioSource flappy;
 
     private Vector3 startPosition;
 
@@ -62,6 +63,7 @@ public class Bird : MonoBehaviour
 
     void Jump()
     {
+        flappy.Play();
         rig.velocity = Vector3.up * jumpForce;
     }
 
