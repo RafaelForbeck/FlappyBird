@@ -16,6 +16,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
+    public InterstitialAdExample interstitialAdExample;
+
     public GameStatus status = GameStatus.Start;
     public float speed;
 
@@ -88,6 +90,7 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
+        interstitialAdExample.ShowAd();
         status = GameStatus.GameOver;
         gameOverImage.enabled = true;
         scoreText.enabled = true;
@@ -103,18 +106,14 @@ public class GameManager : MonoBehaviour
     void GameOverUpdate()
     {
         gameOverTimer += Time.deltaTime;
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            if (gameOverTimer > 1)
-            {
-                Restart();
-            }
-        }   
     }
 
-    void Restart()
+    public void Restart()
     {
+        if (gameOverTimer < 1)
+        {
+            return;
+        }
         status = GameStatus.Start;
         bird.Restart();
         pipesManager.Restart();
